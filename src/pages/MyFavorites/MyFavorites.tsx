@@ -37,12 +37,14 @@ const MyFavorites = () => {
     , []);
 
     return (
-        <div>
+        <div className="bg-gunmetal-700 py-4">
             {!isLoading ? (
                 <div>
-                    <h1>My Favorites</h1>
+                    <div className="py-4 px-16">
+                        <h1 className="text-4xl text-white font-bold">My Favorites</h1>
+                    </div>
                     {favorites && favorites.length > 0 ? (
-                        <div>
+                        <div className="flex flex-row justify-center flex-wrap gap-4 p-4">
                             {shows && 
                                 shows.map((show: IMovieDetail) => (
                                     <MovieCard

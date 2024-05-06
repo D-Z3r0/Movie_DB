@@ -22,7 +22,8 @@ module.exports = {
       'green': {
         600: '#16a34a',
       },
-      'martyc-green': '#518385'
+      'martyc-green': '#518385',
+      'rich-black' : '#12161B'
     },
   },
   plugins: [],

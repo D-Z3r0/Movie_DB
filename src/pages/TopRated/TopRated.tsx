@@ -31,7 +31,7 @@ const TopRated = () => {
   return (
     <div className="bg-gunmetal-700 py-4">
       <div className="py-4 px-16">
-        <h1 className="text-4xl text-white font-bold text-gunmetal-700">Top Rated Movies</h1>
+        <h1 className="text-4xl text-white font-bold">Top Rated Movies</h1>
       </div>
       {isLoading && <div className="relative"><img src={Loader} className="absolute inset-1/2 animate-spin h-10 w-10 justify-center"></img></div>}
       <div className="flex flex-row justify-center flex-wrap gap-4 p-4">

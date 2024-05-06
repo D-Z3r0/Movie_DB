@@ -1,78 +1,75 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { MovieSlider } from "../../components/MovieSlider";
 import { IMovieResponse } from "../../services/movies/types";
-import { getPopular } from "../../services";
-import { getTopRated } from "../../services";
-import { getNowPlaying } from "../../services";
+import { getTrendingWeek } from "../../services/trending/getTrendingWeek";
+import { getTrendingMovies } from "../../services/trending/getTrendingMoviesWeek";
+import { getTrendingTvs } from "../../services/trending/getTrendingTvsWeek";
 
 const Home = () => {
-    const [popularMovies, setPopularMovies] = useState<IMovieResponse[]>([]);
-    const [topRatedMovies, setTopRatedMovies] = useState<IMovieResponse[]>([]);
-    const [nowPlayingMovies, setNowPlayingMovies] = useState<IMovieResponse[]>([]);
+    const [trendingWeek, setTrendingWeek] = useState<IMovieResponse[]>([]);
+    const [trendingMoviesWeek, setTrendingMoviesWeek] = useState<IMovieResponse[]>([]);
+    const [trendingTvsWeek, setTrendingTvsWeek] = useState<IMovieResponse[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [errorRequest, setErrorRequest] = useState<boolean>(false);
 
-    const getPopularMovies = async () => {
-        await getPopular()
+    const getTrendingThisWeek = async () => {
+        await getTrendingWeek()
         .then((data) => {
-        if(data && data.data){
-            const filteredMovies = data.data.results.filter((movie: IMovieResponse) => movie.vote_average > 6.5);
-            setPopularMovies(filteredMovies);
-        } 
+            if(data && data.data){
+                // console.log(data.data.results);
+                setTrendingWeek(data.data.results);
+            } 
         })
         .catch((err) => {
-        setErrorRequest(true);
-        });
-    };
-
-    const getTopRatedMovies = async () => {
-        await getTopRated()
-        .then((data) => {
-        if(data && data.data){
-            console.log(data.data.results);
-            const limitedMovies = data.data.results.slice(0, 10);
-            setTopRatedMovies(limitedMovies);
-        }
-        })
-        .catch((err) => {
-        setErrorRequest(true);
+            setErrorRequest(true);
         });
     }
 
-    const getNowPlayingMovies = async () => {
-        await getNowPlaying()
+    const getTrendingMoviesThisWeek = async () => {
+        await getTrendingMovies()
         .then((data) => {
-        if(data && data.data){
-            console.log(data.data.results);
-            const filteredMovies = data.data.results.filter((movie: IMovieResponse) => movie.vote_average > 7);
-            setNowPlayingMovies(filteredMovies);
-        }
+            if(data && data.data){
+                // console.log(data.data.results);
+                setTrendingMoviesWeek(data.data.results);
+            } 
         })
         .catch((err) => {
-        setErrorRequest(true);
+            setErrorRequest(true);
+        });
+    }
+
+    const getTrendingTvsThisWeek = async () => {
+        await getTrendingTvs()
+        .then((data) => {
+            if(data && data.data){
+                console.log(data.data.results);
+                setTrendingTvsWeek(data.data.results);
+            } 
+        })
+        .catch((err) => {
+            setErrorRequest(true);
         });
     }
 
     useEffect(() => {
-        setIsLoading(true);
-        getPopularMovies();
-        getTopRatedMovies();
-        getNowPlayingMovies();
+        getTrendingThisWeek();
+        getTrendingMoviesThisWeek();
+        getTrendingTvsThisWeek();
     }, []);
 
     return (
-        <div className="px-6 py-4 w-screen h-full object-cover bg-gunmetal-700">
-            <div>
+        <div className="px-6 py-4 w-full h-full bg-gunmetal-700">
+            {/* <div>
                 <h2 className="font-semibold text-3xl text-white py-5">Popular</h2>
-                <MovieSlider movies={popularMovies} />
+                <MovieSlider movies={setTrendingWeek} />
+            </div> */}
+            <div>
+                <h2 className="font-semibold text-3xl text-white py-5">Trending Movies This Week</h2>
+                <MovieSlider movies={trendingMoviesWeek} />
             </div>
             <div>
-                <h2 className="font-semibold text-3xl text-white py-5">Top Rated</h2>
-                <MovieSlider movies={topRatedMovies} />
-            </div>
-            <div>
-                <h2 className="font-semibold text-3xl text-white py-5">Now Playing</h2>
-                <MovieSlider movies={nowPlayingMovies} />
+                <h2 className="font-semibold text-3xl text-white py-5">Trending TV Shows This Week</h2>
+                <MovieSlider movies={trendingTvsWeek} />
             </div>
         </div>
     );
