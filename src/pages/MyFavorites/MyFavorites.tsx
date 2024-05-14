@@ -3,11 +3,13 @@ import { IMovieDetail } from "../../services/movies/types";
 import Loader from "../../assets/loading.png";
 import { MovieCard } from "../../components/MovieCard";
 import { getMovieDetail } from "../../services";
+import { useAppContext } from "../../store/app-context/app-context";
 
 const MyFavorites = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [shows, setShows] = useState<IMovieDetail[]>([]);
     const favorites: string = localStorage.getItem("favorites") || "";
+    const { setUser } = useAppContext();
 
     const runGetFavorites = async () => {
         if (favorites.length) { //es lo mismo que favorites.length > 0
@@ -36,6 +38,20 @@ const MyFavorites = () => {
     }
     , []);
 
+    useEffect(() => {
+        setTimeout(() => {
+            const user = {
+                id: 1,
+                firstName: "John",
+                lastName: "Doe",
+                email: "johndoe@tec.mx"
+            };
+            setUser(user);
+            localStorage.setItem("user", JSON.stringify(user));
+            console.log("respondio el servicio y se asigno el usuario");
+        }, 2000);
+    }, []);
+    
     return (
         <div className="bg-gunmetal-700 py-4">
             {!isLoading ? (
